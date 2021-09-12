@@ -16,16 +16,26 @@ const styles = StyleSheet.create({
 });
 
 const UserProfile = props => {
+  // routeParams ditambahkan di M3S4C3
+  const routeParams = props.route.params;
+
   return (
     <View style={{...styles.mainContainer}}>
-      <Text>User Profile screen</Text>
+      <Text>User Profile Screen</Text>
+
+      {/* `ID` dan `Name` ditambahkan di M3S4C3 */}
+      <Text>ID: {routeParams.id}</Text>
+      <Text>Name: {routeParams.username}</Text>
+
       <TouchableOpacity
         onPress={() => props.navigation.goBack()}
         style={{...styles.navButton}}>
         <Text>Tap to Return</Text>
       </TouchableOpacity>
+
+      {/* Ketika tombol di bawah ditekan, masuk ke komen dengan data orang tersebut yang disimpan di `routeParams` */}
       <TouchableOpacity
-        onPress={() => props.navigation.push('Comments')}
+        onPress={() => props.navigation.push('Comments', routeParams)}
         style={{...styles.navButton}}>
         <Text>Tap to Navigate to Comments</Text>
       </TouchableOpacity>
