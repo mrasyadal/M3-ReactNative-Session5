@@ -7,6 +7,7 @@ import {
   TouchableHighlight,
   FlatList,
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -78,6 +79,9 @@ const Home = props => {
         keyExtractor={item => item.id.toString()}
         renderItem={renderUserList}
       />
+
+      {/* Ionicons ada di M3S4C6, cek dokumentasi file icon yg digunakan. Di bawah adalah tes fungsi Ionicons */}
+      {/* <Ionicons name="home-outline" size={24} /> */}
     </View>
   );
 };
