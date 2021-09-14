@@ -7,6 +7,7 @@ import {
   TouchableHighlight,
   FlatList,
 } from 'react-native';
+import {useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const styles = StyleSheet.create({
@@ -49,6 +50,19 @@ const users = [
 ];
 
 const Home = props => {
+  const globalState = useSelector(state => state);
+  // pada kondisi ini, `state` memiliki property berupa `state.auth` yg berasal dari /redux/reducers/index.js
+  // `auth` sendiri adalah property dengan nilai `authReducer` (lihat di /redux/reducers/index.js)
+  // `authReducer` adalah suatu object dengan property username (lihat di /redux/reducers/auth.js)
+  // berarti, ada globalState.auth.username karena `globalState = state`
+  // bisa juga bikin code spt ini:
+  // const globalState = useSelector(state => return { auth: state.auth, todo: state.todo})
+
+  // Alternatif: misal ada reducers bernama todo yg sudah diimport ke dalam /reducers/index.js
+  // const globalTodo = useSelector(state => state.todo)
+  // const globalAuth = useSelector(state => state.auth)
+  // ada 2 buah variabel yg menyimpan masing-masing reducers
+
   const renderUserList = ({item}) => {
     return (
       <View style={{...styles.userListContainer}}>

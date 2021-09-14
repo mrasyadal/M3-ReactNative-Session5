@@ -8,11 +8,20 @@ import MainTab from './src/navigators/MainTab';
 // import UserProfile from './src/screens/UserProfile';
 // import Comments from './src/screens/Comments';
 
+import {Provider} from 'react-redux';
+import {createStore, applyMiddleware} from 'redux';
+import ReduxThunk from 'redux-thunk';
+import rootReducer from './src/redux/reducers/index.js';
+
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
+
 const App = () => {
   return (
-    <NavigationContainer>
-      <MainTab />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <MainTab />
+      </NavigationContainer>
+    </Provider>
   );
 };
 

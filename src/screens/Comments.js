@@ -18,12 +18,16 @@ const styles = StyleSheet.create({
 const Comments = props => {
   return (
     <View style={{...styles.mainContainer}}>
-      <Text>Comments screen</Text>
-      <TouchableOpacity
-        onPress={() => props.navigation.goBack()}
-        style={{...styles.navButton}}>
-        <Text>Tap to Return</Text>
-      </TouchableOpacity>
+      <Text> All Comments screen</Text>
+      <View
+        style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20}}>
+        <TouchableOpacity style={{...styles.navButton}}>
+          <Text>Change Global State</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{...styles.navButton}}>
+          <Text>Save Global State</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
