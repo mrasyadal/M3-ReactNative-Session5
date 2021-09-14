@@ -3,5 +3,12 @@ const init_state = {
 };
 
 export default (state = init_state, action) => {
-  return state;
+  switch (action.type) {
+    case 'CHANGE_USERNAME':
+      return {...state, username: action.payload};
+    case 'RESET_USERNAME':
+      return {...init_state, username: ''};
+    default:
+      return state;
+  }
 };

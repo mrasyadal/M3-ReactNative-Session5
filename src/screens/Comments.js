@@ -1,5 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -16,16 +18,68 @@ const styles = StyleSheet.create({
 });
 
 const Comments = props => {
+  const dispatch = useDispatch();
+  const globalAuth = useSelector(state => state.auth);
+
+  const changeGlobalState = () => {
+    const newUsername = 'Lmayo';
+
+    AsyncStorage.setItem('username', newUsername)
+      .then(result => {
+        dispatch({
+          type: 'CHANGE_USERNAME',
+          payload: newUsername,
+        });
+      })
+      .catch(err => {
+        console.log('error');
+      });
+  };
+
+  const loadGlobalState = () => {
+    AsyncStorage.getItem('username')
+      .then(result => {
+        dispatch({
+          type: 'CHANGE_USERNAME',
+          payload: result,
+        });
+      })
+      .catch(err => {
+        console.log('error');
+      });
+  };
+
+  const resetGlobalState = () => {
+    AsyncStorage.removeItem('username')
+      .then(result => {
+        dispatch({
+          type: 'RESET_USERNAME',
+        });
+      })
+      .catch(err => {
+        console.log('error');
+      });
+  };
+
+  useEffect(() => {
+    loadGlobalState();
+  }, []);
+
   return (
     <View style={{...styles.mainContainer}}>
-      <Text> All Comments screen</Text>
+      <Text>All Comments screen</Text>
+      <Text>Username: {globalAuth.username}</Text>
       <View
         style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20}}>
-        <TouchableOpacity style={{...styles.navButton}}>
+        <TouchableOpacity
+          style={{...styles.navButton}}
+          onPress={changeGlobalState}>
           <Text>Change Global State</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{...styles.navButton}}>
-          <Text>Save Global State</Text>
+        <TouchableOpacity
+          style={{...styles.navButton}}
+          onPress={resetGlobalState}>
+          <Text>Reset Global State</Text>
         </TouchableOpacity>
       </View>
     </View>
