@@ -8,7 +8,9 @@ const TopTab = createMaterialTopTabNavigator();
 
 const TopTabNav = () => {
   return (
-    <TopTab.Navigator screenOptions={{headerShown: false, lazy: true}}>
+    <TopTab.Navigator
+    // screenOptions={{ headerShown: false }}
+    >
       <TopTab.Screen
         name="AllComments"
         component={Comments}

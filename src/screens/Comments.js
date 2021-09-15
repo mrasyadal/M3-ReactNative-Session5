@@ -22,7 +22,7 @@ const Comments = props => {
   const globalAuth = useSelector(state => state.auth);
 
   const changeGlobalState = () => {
-    const newUsername = 'Lmayo';
+    const newUsername = 'Nama kamu?';
 
     AsyncStorage.setItem('username', newUsername)
       .then(result => {
@@ -61,9 +61,9 @@ const Comments = props => {
       });
   };
 
-  useEffect(() => {
-    loadGlobalState();
-  }, []);
+  // useEffect(() => {
+  //   loadGlobalState();
+  // }, []);
 
   return (
     <View style={{...styles.mainContainer}}>

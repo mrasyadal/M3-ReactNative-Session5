@@ -34,9 +34,8 @@ const styles = StyleSheet.create({
 });
 
 const Login = props => {
-  const globalAuth = useSelector(state => state.auth);
-
   const dispatch = useDispatch();
+  const globalAuth = useSelector(state => state.auth);
 
   const [loginForm, setLoginForm] = useState({
     username: '',
@@ -48,6 +47,7 @@ const Login = props => {
       ...loginForm,
       [field]: value,
     });
+    // console.log(loginForm);
   };
 
   const loginButtonHandler = () => {
@@ -58,22 +58,33 @@ const Login = props => {
     });
   };
 
+  const consoleLogGlobalAuth = () => {
+    //console.log(globalAuthLogin.username);
+  };
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{...styles.main}}>
-        <Text>Username: </Text>
+        <Text>Username: {globalAuth.username}</Text>
+        {/* <TouchableOpacity
+          style={{...styles.loginButton}}
+          onPress={consoleLogGlobalAuth}>
+          <Text style={{color: 'white'}}>Test Console Log globalAuth</Text>
+        </TouchableOpacity> */}
         <View>
           <Text>Username</Text>
           <View style={{...styles.textInput, marginBottom: 12}}>
             <TextInput
-              onChange={text => inputHandler('username', text)}
+              onChangeText={text => {
+                inputHandler('username', text);
+              }}
               placeholder="Your Username"
             />
           </View>
           <Text>Password</Text>
           <View style={{...styles.textInput}}>
             <TextInput
-              onChange={text => inputHandler('password', text)}
+              onChangeText={text => inputHandler('password', text)}
               secureTextEntry
               // secureTextEntry mirip dengan input text="password" di HTML
               placeholder="Your Password"

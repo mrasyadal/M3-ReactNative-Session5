@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
 
 const styles = StyleSheet.create({
   main: {
@@ -33,6 +34,9 @@ const styles = StyleSheet.create({
 });
 
 const Register = () => {
+  const dispatch = useDispatch();
+  const globalAuth = useSelector(state => state.auth);
+
   const [registerForm, setRegisterForm] = useState({
     username: '',
     password: '',
@@ -45,6 +49,14 @@ const Register = () => {
     });
   };
 
+  const registerButtonHandler = () => {
+    dispatch({
+      type: 'CHANGE_USERNAME',
+      payload: registerForm.username,
+      // mengirim payload yg berisi props `username` dr TextInput yg masuk ke fungsi `inputHandler`
+    });
+  };
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{...styles.main}}>
@@ -52,20 +64,22 @@ const Register = () => {
           <Text>Username</Text>
           <View style={{...styles.textInput, marginBottom: 12}}>
             <TextInput
-              onChange={text => inputHandler('username', text)}
+              onChangeText={text => inputHandler('username', text)}
               placeholder="Your Username"
             />
           </View>
           <Text>Password</Text>
           <View style={{...styles.textInput}}>
             <TextInput
-              onChange={text => inputHandler('password', text)}
+              onChangeText={text => inputHandler('password', text)}
               secureTextEntry
               // secureTextEntry mirip dengan input text="password" di HTML
               placeholder="Your Password"
             />
           </View>
-          <TouchableOpacity style={{...styles.registerButton}}>
+          <TouchableOpacity
+            style={{...styles.registerButton}}
+            onPress={registerButtonHandler}>
             <Text style={{color: 'white'}}>Register</Text>
           </TouchableOpacity>
         </View>

@@ -80,6 +80,7 @@ const Home = props => {
   return (
     <View style={{...styles.mainContainer}}>
       <Text>Home screen</Text>
+      <Text>Welcome, {globalState.auth.username}</Text>
       {/* <TouchableOpacity
         onPress={() => props.navigation.navigate('UserProfile')}
         style={{...styles.navButton}}>
