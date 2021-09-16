@@ -9,6 +9,7 @@ import {
   Keyboard,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const styles = StyleSheet.create({
   main: {
@@ -51,11 +52,17 @@ const Login = props => {
   };
 
   const loginButtonHandler = () => {
-    dispatch({
-      type: 'CHANGE_USERNAME',
-      payload: loginForm.username,
-      // mengirim payload yg berisi props `username` dr TextInput yg masuk ke fungsi `inputHandler`
-    });
+    AsyncStorage.setItem('username', loginForm.username)
+      .then(result => {
+        dispatch({
+          type: 'CHANGE_USERNAME',
+          payload: loginForm.username,
+          // mengirim payload yg berisi props `username` dr TextInput yg masuk ke fungsi `inputHandler`
+        });
+      })
+      .catch(err => {
+        console.log('error');
+      });
   };
 
   const consoleLogGlobalAuth = () => {

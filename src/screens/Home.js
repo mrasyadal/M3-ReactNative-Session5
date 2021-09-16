@@ -7,8 +7,9 @@ import {
   TouchableHighlight,
   FlatList,
 } from 'react-native';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -18,7 +19,7 @@ const styles = StyleSheet.create({
   navButton: {
     margin: 4,
     paddingVertical: 8,
-    paddingHorizontal: 4,
+    paddingHorizontal: 8,
     backgroundColor: 'lightblue',
     borderRadius: 4,
   },
@@ -50,6 +51,7 @@ const users = [
 ];
 
 const Home = props => {
+  const dispatch = useDispatch();
   const globalState = useSelector(state => state);
   // pada kondisi ini, `state` memiliki property berupa `state.auth` yg berasal dari /redux/reducers/index.js
   // `auth` sendiri adalah property dengan nilai `authReducer` (lihat di /redux/reducers/index.js)
@@ -63,13 +65,28 @@ const Home = props => {
   // const globalAuth = useSelector(state => state.auth)
   // ada 2 buah variabel yg menyimpan masing-masing reducers
 
+  const logoutButtonHandler = () => {
+    AsyncStorage.removeItem('username')
+      .then(result => {
+        dispatch({
+          type: 'RESET_USERNAME',
+        });
+      })
+      .catch(err => {
+        console.log('error');
+      });
+  };
+
   const renderUserList = ({item}) => {
     return (
       <View style={{...styles.userListContainer}}>
         {/* View bersifat flexbox yang mengatur text berupa username dan tombol 'TouchableOpacity' */}
         <Text>{item.username}</Text>
         <TouchableOpacity
-          style={{...styles.navButton, backgroundColor: 'lightpink'}}
+          style={{
+            ...styles.navButton,
+            backgroundColor: 'lightpink',
+          }}
           onPress={() => props.navigation.push('UserProfile', item)}>
           <Text>Go to User Profile</Text>
         </TouchableOpacity>
@@ -87,6 +104,15 @@ const Home = props => {
         <Text>Tap to Navigate</Text>
       </TouchableOpacity> */}
       {/* Kode di atas dijadikan komen di M3S4C3 */}
+
+      <TouchableOpacity
+        style={{
+          ...styles.navButton,
+          backgroundColor: 'darkred',
+        }}
+        onPress={logoutButtonHandler}>
+        <Text style={{color: 'white'}}>Log out</Text>
+      </TouchableOpacity>
 
       <FlatList
         style={{...styles.flatListContainer}}

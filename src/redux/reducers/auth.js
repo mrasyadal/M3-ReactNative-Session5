@@ -7,7 +7,7 @@ export default (state = init_state, action) => {
     case 'CHANGE_USERNAME':
       return {...state, username: action.payload};
     case 'RESET_USERNAME':
-      return {...init_state, username: ''};
+      return {...state, username: ''};
     default:
       return state;
   }
