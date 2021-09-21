@@ -46,6 +46,7 @@ const MainTab = () => {
               right: 16,
               bottom: 16,
             },
+            headerShown: false,
           };
         }
       }>

@@ -7,9 +7,11 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
+  ToastAndroid,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Axios from 'axios';
 
 const styles = StyleSheet.create({
   main: {
@@ -34,6 +36,8 @@ const styles = StyleSheet.create({
   },
 });
 
+const API_URL = 'http://10.0.2.2:2000';
+
 const Login = props => {
   const dispatch = useDispatch();
   const globalAuth = useSelector(state => state.auth);
@@ -52,17 +56,63 @@ const Login = props => {
   };
 
   const loginButtonHandler = () => {
-    AsyncStorage.setItem('username', loginForm.username)
+    Axios.get(`${API_URL}/users`, {
+      params: {
+        username: loginForm.username,
+        password: loginForm.password,
+      },
+    })
       .then(result => {
-        dispatch({
-          type: 'CHANGE_USERNAME',
-          payload: loginForm.username,
-          // mengirim payload yg berisi props `username` dr TextInput yg masuk ke fungsi `inputHandler`
-        });
+        // ToastAndroid.show(
+        //   `Correct ID and Password, ${result.data[0].username} & ${result.data[0].password}`,
+        //   ToastAndroid.LONG,
+        // );
+        if (result.data.length) {
+          AsyncStorage.setItem('username', result.data[0].username)
+            .then(() => {
+              // Interceptor ada di M3S6C6
+              // memasukkan interceptors untuk menandai user yg sedang menggunakan app ke bagian backend
+              // Menyimpan id interceptor ke dalam AsyncStorage
+              const myInterceptor = Axios.interceptors.request.use(request => {
+                request.headers['NAMA-USER'] = result.data[0].username;
+                return request;
+                // request ini mengandung angka yg berfungsi sebagai id dari request
+              });
+
+              AsyncStorage.setItem('interceptorId', myInterceptor.toString())
+                .then(() => {
+                  dispatch({
+                    type: 'CHANGE_USERNAME',
+                    payload: result.data[0].username,
+                    // `result.data adalah array yg berisikan object di masing2 indexnya. Index yg berisi adalah index ke-0`
+                  });
+                })
+                .catch(() => {
+                  console.log('AsyncStorage interceptor error');
+                });
+            })
+            .catch(err => {
+              console.log('ERROR');
+            });
+        } else {
+          ToastAndroid.show('Wrong Username / Password', ToastAndroid.SHORT);
+        }
       })
       .catch(err => {
-        console.log('error');
+        console.log(err);
       });
+
+    // AsyncStorage.setItem('username', loginForm.username)
+    //   .then(result => {
+    //     dispatch({
+    //       type: 'CHANGE_USERNAME',
+    //       payload: loginForm.username,
+    //       // mengirim payload yg berisi props `username` dr TextInput yg masuk ke fungsi `inputHandler`
+    //     });
+    //   })
+    //   .catch(err => {
+    //     console.log('error');
+    //   });
   };
 
   const consoleLogGlobalAuth = () => {
@@ -72,7 +122,6 @@ const Login = props => {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{...styles.main}}>
-        <Text>Username: {globalAuth.username}</Text>
         {/* <TouchableOpacity
           style={{...styles.loginButton}}
           onPress={consoleLogGlobalAuth}>
